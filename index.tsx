@@ -284,7 +284,7 @@ function App() {
         </header>
 
         <main className="bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-2xl shadow-cyan-500/10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-2 gap-4 items-start">
             <div className="space-y-6">
               <InputControl
                 id="culture-od"
