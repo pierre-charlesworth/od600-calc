@@ -1,0 +1,21 @@
+
+{
+  "short_name": "OD600 Calc",
+  "name": "OD600 Dilution Calculator",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x1992"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1e293b",
+  "background_color": "#0f172a"
+}

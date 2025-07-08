@@ -1,0 +1,6 @@
+{
+  "name": "OD600 Dilution Calculator",
+  "description": "A utility to calculate the volume of a bacterial culture to add to a new volume of media to achieve a target OD600. Designed as an installable Progressive Web App for easy access in the lab.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
