@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
 
 // All components are defined in this single file for simplicity.
@@ -229,8 +229,50 @@ function App() {
     setFinalVolumeUnit('mL');
   };
 
+  // --- INSTALL PWA PROMPT HOOK ---
+
+  function usePwaInstallPrompt() {
+    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      const handler = (e: any) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+        setIsVisible(true);
+      };
+      window.addEventListener('beforeinstallprompt', handler);
+      return () => window.removeEventListener('beforeinstallprompt', handler);
+    }, []);
+
+    const install = async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsVisible(false);
+      }
+      setDeferredPrompt(null);
+    };
+
+    return { isVisible, install, hide: () => setIsVisible(false) };
+  }
+
+  const installPrompt = usePwaInstallPrompt();
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-900 text-white font-sans">
+      {/* PWA install banner */}
+      {installPrompt.isVisible && (
+        <div className="fixed bottom-4 inset-x-0 mx-auto max-w-md bg-slate-800 border border-slate-700 rounded-xl p-4 flex items-center justify-between shadow-lg">
+          <span className="text-sm">Install this app?</span>
+          <div className="space-x-2">
+            <button onClick={installPrompt.install} className="px-3 py-1 rounded-md bg-cyan-500 hover:bg-cyan-600 text-white text-sm">Install</button>
+            <button onClick={installPrompt.hide} className="px-3 py-1 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm">Close</button>
+          </div>
+        </div>
+      )}
+
       <div className="w-full max-w-md mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-cyan-400">
@@ -336,3 +378,11 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// Add type for BeforeInstallPromptEvent for TS strictness
+declare global {
+  interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string[] }>;
+  }
+}
