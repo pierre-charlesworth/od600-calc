@@ -273,7 +273,7 @@ function App() {
         </div>
       )}
 
-      <div className="w-full max-w-md mx-auto">
+      <div className="w-full max-w-3xl mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-cyan-400">
             OD<sub className="text-2xl sm:text-3xl">600</sub> Dilution Calculator
@@ -284,76 +284,69 @@ function App() {
         </header>
 
         <main className="bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-2xl shadow-cyan-500/10">
-          <div className="space-y-6">
-            <InputControl
-              id="culture-od"
-              label="Culture OD₆₀₀"
-              value={cultureOd}
-              onChange={(e) => setCultureOd(e.target.value)}
-              placeholder="e.g., 1.8"
-              iconComponent={<FlaskIcon />}
-            />
-            <InputControl
-              id="target-od"
-              label="Target OD₆₀₀"
-              value={targetOd}
-              onChange={(e) => setTargetOd(e.target.value)}
-              placeholder="e.g., 0.1"
-              iconComponent={<TargetIcon />}
-            />
-            <InputControl
-              id="final-volume"
-              label="Final Volume"
-              value={finalVolume}
-              onChange={(e) => setFinalVolume(e.target.value)}
-              placeholder="e.g., 50"
-              iconComponent={<BeakerIcon />}
-              unitSelector={
-                <select
-                  aria-label="Final volume unit"
-                  value={finalVolumeUnit}
-                  onChange={(e) => setFinalVolumeUnit(e.target.value as 'mL' | 'L')}
-                  className="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-8 text-slate-400 focus:ring-2 focus:ring-inset focus:ring-cyan-500 sm:text-sm appearance-none"
-                  style={{ backgroundImage: 'none' }}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <div className="space-y-6">
+              <InputControl
+                id="culture-od"
+                label="Culture OD₆₀₀"
+                value={cultureOd}
+                onChange={(e) => setCultureOd(e.target.value)}
+                placeholder="e.g., 1.8"
+                iconComponent={<FlaskIcon />}
+              />
+              <InputControl
+                id="target-od"
+                label="Target OD₆₀₀"
+                value={targetOd}
+                onChange={(e) => setTargetOd(e.target.value)}
+                placeholder="e.g., 0.1"
+                iconComponent={<TargetIcon />}
+              />
+              <InputControl
+                id="final-volume"
+                label="Final Volume"
+                value={finalVolume}
+                onChange={(e) => setFinalVolume(e.target.value)}
+                placeholder="e.g., 50"
+                iconComponent={<BeakerIcon />}
+                unitSelector={
+                  <select
+                    aria-label="Final volume unit"
+                    value={finalVolumeUnit}
+                    onChange={(e) => setFinalVolumeUnit(e.target.value as 'mL' | 'L')}
+                    className="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-8 text-slate-400 focus:ring-2 focus:ring-inset focus:ring-cyan-500 sm:text-sm appearance-none"
+                    style={{ backgroundImage: 'none' }}
+                  >
+                    <option className="bg-slate-900 text-white">mL</option>
+                    <option className="bg-slate-900 text-white">L</option>
+                  </select>
+                }
+              />
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-slate-300">Results</h2>
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 px-3 py-1 rounded-md text-sm text-slate-400 hover:bg-slate-700 hover:text-cyan-400 transition-colors"
+                  aria-label="Reset fields"
                 >
-                  <option className="bg-slate-900 text-white">mL</option>
-                  <option className="bg-slate-900 text-white">L</option>
-                </select>
-              }
-            />
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-slate-700">
-             <div className="flex justify-between items-center mb-4">
-               <h2 className="text-xl font-semibold text-slate-300">Results</h2>
-               <button 
-                 onClick={handleReset} 
-                 className="flex items-center gap-2 px-3 py-1 rounded-md text-sm text-slate-400 hover:bg-slate-700 hover:text-cyan-400 transition-colors"
-                 aria-label="Reset fields"
-               >
-                 <ResetIcon />
-                 Reset
-               </button>
-             </div>
-            {error ? (
-              <div className="flex items-center justify-center gap-2 bg-red-900/50 text-red-300 p-3 rounded-lg">
-                <InfoIcon />
-                <span className="font-medium">{error}</span>
+                  <ResetIcon />
+                  Reset
+                </button>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <ResultDisplay
-                  label="Culture to Add"
-                  value={cultureDisplayValue}
-                  unit={cultureDisplayUnit}
-                />
-                <ResultDisplay
-                  label="Media to Add"
-                  value={mediaVolume}
-                  unit="mL"
-                />
-              </div>
-            )}
+              {error ? (
+                <div className="flex items-center justify-center gap-2 bg-red-900/50 text-red-300 p-3 rounded-lg">
+                  <InfoIcon />
+                  <span className="font-medium">{error}</span>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <ResultDisplay label="Culture to Add" value={cultureDisplayValue} unit={cultureDisplayUnit} />
+                  <ResultDisplay label="Media to Add" value={mediaVolume} unit="mL" />
+                </div>
+              )}
+            </div>
           </div>
         </main>
         
