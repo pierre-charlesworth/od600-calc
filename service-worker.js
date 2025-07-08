@@ -1,12 +1,11 @@
-const CACHE_NAME = 'od600-calculator-v5';
+const CACHE_NAME = 'od600-calculator-v6';
+// Vite generates hashed assets, so we only cache the entry points.
+// The build process would typically inject a manifest of files to cache here.
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/index.tsx',
-  '/App.tsx',
-  '/components/InputControl.tsx',
-  '/components/ResultDisplay.tsx',
+  '/index.css'
 ];
 
 self.addEventListener('install', event => {
@@ -14,6 +13,9 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Opened cache');
+        // We are not caching the JS entry points because Vite will give them
+        // unique hashes on each build. A more advanced service worker
+        // would use a tool like Workbox to handle this automatically.
         return cache.addAll(urlsToCache);
       })
   );

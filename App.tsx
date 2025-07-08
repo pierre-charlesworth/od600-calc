@@ -1,6 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import InputControl from './components/InputControl.tsx';
 import ResultDisplay from './components/ResultDisplay.tsx';
+import { FlaskIcon } from './components/icons/FlaskIcon.tsx';
+import { TargetIcon } from './components/icons/TargetIcon.tsx';
+import { BeakerIcon } from './components/icons/BeakerIcon.tsx';
+import { ResetIcon } from './components/icons/ResetIcon.tsx';
+import { InfoIcon } from './components/icons/InfoIcon.tsx';
+
 
 interface CalculationResult {
   cultureVolume: number;
@@ -75,6 +81,7 @@ function App() {
               value={cultureOd}
               onChange={(e) => setCultureOd(e.target.value)}
               placeholder="e.g., 1.8"
+              iconComponent={<FlaskIcon />}
             />
             <InputControl
               id="target-od"
@@ -82,6 +89,7 @@ function App() {
               value={targetOd}
               onChange={(e) => setTargetOd(e.target.value)}
               placeholder="e.g., 0.1"
+              iconComponent={<TargetIcon />}
             />
             <InputControl
               id="final-volume"
@@ -89,6 +97,7 @@ function App() {
               value={finalVolume}
               onChange={(e) => setFinalVolume(e.target.value)}
               placeholder="e.g., 50"
+              iconComponent={<BeakerIcon />}
               unitSelector={
                 <select
                   aria-label="Final volume unit"
@@ -112,11 +121,13 @@ function App() {
                  className="flex items-center gap-2 px-3 py-1 rounded-md text-sm text-slate-400 hover:bg-slate-700 hover:text-cyan-400 transition-colors"
                  aria-label="Reset fields"
                >
+                 <ResetIcon />
                  Reset
                </button>
              </div>
             {error ? (
               <div className="flex items-center justify-center gap-2 bg-red-900/50 text-red-300 p-3 rounded-lg">
+                <InfoIcon />
                 <span className="font-medium">{error}</span>
               </div>
             ) : (
