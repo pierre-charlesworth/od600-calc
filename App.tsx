@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import InputControl from './components/InputControl';
-import ResultDisplay from './components/ResultDisplay';
-import { FlaskIcon } from './components/icons/FlaskIcon';
-import { TargetIcon } from './components/icons/TargetIcon';
-import { BeakerIcon } from './components/icons/BeakerIcon';
-import { InfoIcon } from './components/icons/InfoIcon';
-import { ResetIcon } from './components/icons/ResetIcon';
+import InputControl from './components/InputControl.tsx';
+import ResultDisplay from './components/ResultDisplay.tsx';
+import { FlaskIcon } from './components/icons/FlaskIcon.tsx';
+import { TargetIcon } from './components/icons/TargetIcon.tsx';
+import { BeakerIcon } from './components/icons/BeakerIcon.tsx';
+import { InfoIcon } from './components/icons/InfoIcon.tsx';
+import { ResetIcon } from './components/icons/ResetIcon.tsx';
 
 interface CalculationResult {
   cultureVolume: number;
