@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => {
         react(),
         VitePWA({
           registerType: 'autoUpdate',
+          strategies: 'injectManifest',
+          srcDir: 'src',
+          filename: 'sw.ts',
           manifest: {
             short_name: 'OD600 Calc',
             name: 'OD600 Dilution Calculator',
