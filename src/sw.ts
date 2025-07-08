@@ -1,7 +1,13 @@
-import { precacheAndRoute } from 'workbox-precaching';
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { registerRoute, NavigationRoute } from 'workbox-routing';
 
 // self.__WB_MANIFEST is injected by workbox at build time
 precacheAndRoute(self.__WB_MANIFEST);
+
+// Serve index.html for navigation requests so the PWA works when opened from the home-screen or deep links
+const handler = createHandlerBoundToURL('/index.html');
+const navigationRoute = new NavigationRoute(handler);
+registerRoute(navigationRoute);
 
 // Basic runtime cache: try cache first, fallback to network, then cache new request
 self.addEventListener('fetch', (event) => {
