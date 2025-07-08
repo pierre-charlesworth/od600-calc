@@ -1,4 +1,4 @@
-const CACHE_NAME = 'od600-calculator-v2';
+const CACHE_NAME = 'od600-calculator-v5';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -7,11 +7,6 @@ const urlsToCache = [
   '/App.tsx',
   '/components/InputControl.tsx',
   '/components/ResultDisplay.tsx',
-  '/components/icons/BeakerIcon.tsx',
-  '/components/icons/FlaskIcon.tsx',
-  '/components/icons/InfoIcon.tsx',
-  '/components/icons/ResetIcon.tsx',
-  '/components/icons/TargetIcon.tsx',
 ];
 
 self.addEventListener('install', event => {
@@ -74,7 +69,12 @@ self.addEventListener('fetch', event => {
 
             return networkResponse;
           }
-        );
+        ).catch(error => {
+          console.error('Service Worker fetch request failed:', error);
+          // When a fetch fails, we don't want to cause an "unexpected error".
+          // By not returning anything from the catch, the promise resolves to 'undefined'
+          // and the browser handles the network failure as if the SW wasn't there.
+        });
       })
     );
 });

@@ -1,11 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import InputControl from './components/InputControl.tsx';
 import ResultDisplay from './components/ResultDisplay.tsx';
-import { FlaskIcon } from './components/icons/FlaskIcon.tsx';
-import { TargetIcon } from './components/icons/TargetIcon.tsx';
-import { BeakerIcon } from './components/icons/BeakerIcon.tsx';
-import { InfoIcon } from './components/icons/InfoIcon.tsx';
-import { ResetIcon } from './components/icons/ResetIcon.tsx';
 
 interface CalculationResult {
   cultureVolume: number;
@@ -79,7 +74,6 @@ function App() {
               label="Culture OD₆₀₀"
               value={cultureOd}
               onChange={(e) => setCultureOd(e.target.value)}
-              iconComponent={<FlaskIcon />}
               placeholder="e.g., 1.8"
             />
             <InputControl
@@ -87,7 +81,6 @@ function App() {
               label="Target OD₆₀₀"
               value={targetOd}
               onChange={(e) => setTargetOd(e.target.value)}
-              iconComponent={<TargetIcon />}
               placeholder="e.g., 0.1"
             />
             <InputControl
@@ -95,7 +88,6 @@ function App() {
               label="Final Volume"
               value={finalVolume}
               onChange={(e) => setFinalVolume(e.target.value)}
-              iconComponent={<BeakerIcon />}
               placeholder="e.g., 50"
               unitSelector={
                 <select
@@ -120,13 +112,11 @@ function App() {
                  className="flex items-center gap-2 px-3 py-1 rounded-md text-sm text-slate-400 hover:bg-slate-700 hover:text-cyan-400 transition-colors"
                  aria-label="Reset fields"
                >
-                 <ResetIcon />
                  Reset
                </button>
              </div>
             {error ? (
               <div className="flex items-center justify-center gap-2 bg-red-900/50 text-red-300 p-3 rounded-lg">
-                <InfoIcon />
                 <span className="font-medium">{error}</span>
               </div>
             ) : (
