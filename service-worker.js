@@ -1,11 +1,14 @@
-const CACHE_NAME = 'od600-calculator-v6';
-// Vite generates hashed assets, so we only cache the entry points.
-// The build process would typically inject a manifest of files to cache here.
+const CACHE_NAME = 'od600-calculator-v9';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/index.tsx',
   '/manifest.json',
-  '/index.css'
+  // CDN assets for full offline support
+  'https://cdn.tailwindcss.com',
+  'https://unpkg.com/react@18/umd/react.development.js',
+  'https://unpkg.com/react-dom@18/umd/react-dom.development.js',
+  'https://unpkg.com/@babel/standalone/babel.min.js'
 ];
 
 self.addEventListener('install', event => {
@@ -13,9 +16,6 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Opened cache');
-        // We are not caching the JS entry points because Vite will give them
-        // unique hashes on each build. A more advanced service worker
-        // would use a tool like Workbox to handle this automatically.
         return cache.addAll(urlsToCache);
       })
   );
@@ -53,15 +53,10 @@ self.addEventListener('fetch', event => {
         return fetch(event.request).then(
           networkResponse => {
             // We don't cache opaque responses or error responses.
-            // .ok is true for status codes in the range 200-299.
             if (!networkResponse || !networkResponse.ok || networkResponse.type === 'opaque') {
               return networkResponse;
             }
-
-            // IMPORTANT: Clone the response. A response is a stream
-            // and because we want the browser to consume the response
-            // as well as the cache consuming the response, we need
-            // to clone it so we have two streams.
+            
             const responseToCache = networkResponse.clone();
 
             caches.open(CACHE_NAME)
