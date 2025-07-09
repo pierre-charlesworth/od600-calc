@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
-import './pwa';
+import './src/pwa';
 
 // All components are defined in this single file for simplicity.
 
