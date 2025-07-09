@@ -161,12 +161,10 @@ interface ResultDisplayProps {
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ label, value, unit }) => {
-  const formatOptions = unit === 'µL'
-    ? { minimumFractionDigits: 1, maximumFractionDigits: 1 }
-    : { minimumFractionDigits: 3, maximumFractionDigits: 3 };
+  const formatOptions = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
 
   const formattedValue = value.toLocaleString(undefined, formatOptions);
-  const zeroValue = unit === 'µL' ? '0.0' : '0.000';
+  const zeroValue = '0.00';
 
   return (
     <div className="bg-slate-700/50 rounded-lg p-4 text-center ring-1 ring-slate-700">
