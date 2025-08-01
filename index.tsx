@@ -423,9 +423,6 @@ function App() {
           </div>
         </main>
         
-        <footer className="text-center mt-8 text-slate-500 text-sm">
-          <p>Built for the modern lab.</p>
-        </footer>
         <GrowthTimeEstimator />
       </div>
     </div>
