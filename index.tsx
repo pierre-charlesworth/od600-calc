@@ -179,6 +179,80 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ label, value, unit }) => 
 };
 
 
+// --- GROWTH TIME ESTIMATOR ---
+const speciesGrowthRates: Record<string, number> = {
+  'E. coli': 2.0, // per hour
+  'S. cerevisiae': 0.4,
+  'B. subtilis': 1.2,
+  'Custom': 1.0,
+};
+
+function GrowthTimeEstimator() {
+  const [startTime, setStartTime] = useState('');
+  const [startOd, setStartOd] = useState('');
+  const [targetOd, setTargetOd] = useState('');
+  const [species, setSpecies] = useState('E. coli');
+  const [customRate, setCustomRate] = useState('1.0');
+
+  // Calculate ETA
+  const result = useMemo(() => {
+    const od0 = parseFloat(startOd);
+    const od1 = parseFloat(targetOd);
+    let rate = species === 'Custom' ? parseFloat(customRate) : speciesGrowthRates[species];
+    if (isNaN(od0) || isNaN(od1) || isNaN(rate) || od0 <= 0 || od1 <= od0 || rate <= 0) {
+      return { eta: '', error: 'Enter valid values (target OD > start OD > 0, rate > 0)' };
+    }
+    // t = (ln(OD1) - ln(OD0)) / rate
+    const hours = (Math.log(od1) - Math.log(od0)) / rate;
+    if (!isFinite(hours) || hours < 0) return { eta: '', error: 'Check values' };
+    if (!startTime) return { eta: hours.toFixed(2) + ' h', error: null };
+    // Add hours to start time
+    const [h, m] = startTime.split(':').map(Number);
+    if (isNaN(h) || isNaN(m)) return { eta: hours.toFixed(2) + ' h', error: null };
+    const start = new Date();
+    start.setHours(h, m, 0, 0);
+    const etaDate = new Date(start.getTime() + hours * 60 * 60 * 1000);
+    const etaStr = etaDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return { eta: etaStr + ` (${hours.toFixed(2)} h)`, error: null };
+  }, [startTime, startOd, targetOd, species, customRate]);
+
+  return (
+    <div className="bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-2xl shadow-cyan-500/10 mt-8">
+      <h2 className="text-xl font-semibold text-cyan-400 mb-4">Growth Time Estimator</h2>
+      <div className="grid grid-cols-2 gap-4 items-start">
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Start Time</label>
+            <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} className="block w-full rounded-md border-0 bg-slate-700/50 py-3 pl-4 pr-4 text-white shadow-sm ring-1 ring-inset ring-slate-600 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-cyan-500 sm:text-sm sm:leading-6 transition-all" />
+          </div>
+          <InputControl id="start-od" label="Starting OD" value={startOd} onChange={e => setStartOd(e.target.value)} placeholder="e.g., 0.1" iconComponent={<FlaskIcon />} />
+          <InputControl id="target-od-growth" label="Target OD" value={targetOd} onChange={e => setTargetOd(e.target.value)} placeholder="e.g., 1.0" iconComponent={<TargetIcon />} />
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Species</label>
+            <select value={species} onChange={e => setSpecies(e.target.value)} className="block w-full rounded-md border-0 bg-slate-700/50 py-3 pl-4 pr-4 text-white shadow-sm ring-1 ring-inset ring-slate-600 focus:ring-2 focus:ring-inset focus:ring-cyan-500 sm:text-sm">
+              {Object.keys(speciesGrowthRates).map(sp => <option key={sp}>{sp}</option>)}
+            </select>
+          </div>
+          {species === 'Custom' && (
+            <InputControl id="custom-rate" label="Growth Rate (1/h)" value={customRate} onChange={e => setCustomRate(e.target.value)} placeholder="e.g., 0.7" />
+          )}
+        </div>
+        <div className="flex flex-col justify-center items-center h-full">
+          <div className="bg-slate-700/50 rounded-lg p-6 text-center ring-1 ring-slate-700 min-w-[180px]">
+            <p className="text-sm font-medium text-slate-400 mb-2">Estimated Arrival Time</p>
+            {result.error ? (
+              <span className="text-red-400 font-medium">{result.error}</span>
+            ) : (
+              <span className="text-2xl font-semibold text-cyan-400 tracking-tight">{result.eta}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 // --- MAIN APP COMPONENT ---
 
 function App() {
@@ -352,6 +426,7 @@ function App() {
         <footer className="text-center mt-8 text-slate-500 text-sm">
           <p>Built for the modern lab.</p>
         </footer>
+        <GrowthTimeEstimator />
       </div>
     </div>
   );
